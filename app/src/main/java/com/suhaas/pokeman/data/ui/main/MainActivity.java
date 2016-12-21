@@ -1,19 +1,22 @@
-package com.suhaas.pokeman;
+package com.suhaas.pokeman.data.ui.main;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.suhaas.pokeman.data.model.ListResponse;
-import com.suhaas.pokeman.data.model.Results;
+import com.suhaas.pokeman.Constants;
+import com.suhaas.pokeman.R;
+import com.suhaas.pokeman.data.model.list.ListResponse;
+import com.suhaas.pokeman.data.model.list.Results;
 import com.suhaas.pokeman.data.remote.ApiService;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,12 +25,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.rvList)
+    RecyclerView recyclerView;
+    private ListAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ButterKnife.bind(this);
+
+        recyclerView = (RecyclerView)findViewById(R.id.rvList);
+//        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -41,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ListResponse> call, Response<ListResponse> response) {
                 for (Results results : response.body().getResults()){
                     Log.d("pokeman Name", results.getName());
+                    adapter = new ListAdapter(MainActivity.this, response.body().getResults());
+                    recyclerView.setAdapter(adapter);
                 }
             }
 

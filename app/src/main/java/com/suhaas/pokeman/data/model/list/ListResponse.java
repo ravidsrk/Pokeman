@@ -1,4 +1,4 @@
-package com.suhaas.pokeman.data.model;
+package com.suhaas.pokeman.data.model.list;
 
 
 import com.google.gson.annotations.SerializedName;

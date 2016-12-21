@@ -2,7 +2,7 @@ package com.suhaas.pokeman.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Results {
+public class Move {
     @SerializedName("url")
     private String url;
     @SerializedName("name")
