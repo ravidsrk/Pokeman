@@ -51,7 +51,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Sprites> call, Response<Sprites> response) {
                 String spritesImage = response.body().getFrontShiny();
-                Log.d("Venue Name", spritesImage);
+//                Log.d("Venue Name", spritesImage);
                 Glide.with(getApplicationContext())
                         .load(spritesImage)
                         .skipMemoryCache(true)
