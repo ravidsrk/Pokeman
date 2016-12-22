@@ -9,11 +9,16 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.suhaas.pokeman.Constants;
 import com.suhaas.pokeman.R;
 import com.suhaas.pokeman.data.model.Sprites;
 import com.suhaas.pokeman.data.model.list.Results;
 import com.suhaas.pokeman.data.remote.ApiService;
+
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +59,23 @@ public class DetailActivity extends AppCompatActivity {
 //                Log.d("Venue Name", spritesImage);
                 Glide.with(getApplicationContext())
                         .load(spritesImage)
+                        .listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                android.util.Log.d("GLIDE",
+                                        String.format(Locale.ROOT, "onException(%s, %s, %s, %s)", e, model, target,
+                                                isFirstResource), e);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                android.util.Log.d("GLIDE",
+                                        String.format(Locale.ROOT, "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target,
+                                                isFromMemoryCache, isFirstResource));
+                                return false;
+                            }
+                        })
                         .skipMemoryCache(true)
                         .dontTransform()
                         .into(pokemanImage);
