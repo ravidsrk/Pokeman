@@ -1,6 +1,7 @@
-package com.suhaas.pokeman.data.ui.main;
+package com.suhaas.pokeman.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.suhaas.pokeman.R;
 import com.suhaas.pokeman.data.model.list.Results;
+import com.suhaas.pokeman.ui.detail.DetailActivity;
 
 import java.util.List;
 
@@ -42,6 +44,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             nameText = (TextView) itemView.findViewById(R.id.text_list_name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Results results = resultsArrayList.get(position);
+                        Intent i = new Intent(mContext, DetailActivity.class);
+                        i.putExtra("nameText", results.getName());
+                        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(i);
+                    }
+                }
+            });
         }
     }
 }

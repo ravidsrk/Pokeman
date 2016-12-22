@@ -1,4 +1,4 @@
-package com.suhaas.pokeman.data.ui.main;
+package com.suhaas.pokeman.ui.main;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
