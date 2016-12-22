@@ -3,22 +3,19 @@ package com.suhaas.pokeman.ui.detail;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.suhaas.pokeman.Constants;
 import com.suhaas.pokeman.R;
+import com.suhaas.pokeman.data.model.PokemanResponse;
 import com.suhaas.pokeman.data.model.Sprites;
-import com.suhaas.pokeman.data.model.list.Results;
+import com.suhaas.pokeman.data.model.Stats;
 import com.suhaas.pokeman.data.remote.ApiService;
-
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,8 +25,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
 
-    ImageView pokemanImage;
-    Sprites sprites;
+    android.support.v7.widget.AppCompatImageView pokemanImage;
+
+    private RecyclerView recyclerView;
+    private StatsAdapter adapter;
+    String pokeman;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +39,15 @@ public class DetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        pokemanImage = (ImageView) findViewById(R.id.pokemanImage);
+        recyclerView = (RecyclerView) findViewById(R.id.rvStatList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        pokemanImage = (android.support.v7.widget.AppCompatImageView) findViewById(R.id.pokemanImage);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        String pokeman = bundle.getString("nameText");
+        pokeman = bundle.getString("nameText");
+        getSupportActionBar().setTitle(pokeman);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -52,37 +56,36 @@ public class DetailActivity extends AppCompatActivity {
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        apiService.getUser(pokeman).enqueue(new Callback<Sprites>() {
+        apiService.getPokemanResponse(pokeman).enqueue(new Callback<PokemanResponse>() {
             @Override
-            public void onResponse(Call<Sprites> call, Response<Sprites> response) {
-                String spritesImage = response.body().getFrontShiny();
-//                Log.d("Venue Name", spritesImage);
+            public void onResponse(Call<PokemanResponse> call, Response<PokemanResponse> response) {
+                Sprites spritesImage = response.body().getSprites();
                 Glide.with(getApplicationContext())
-                        .load(spritesImage)
-                        .listener(new RequestListener<String, GlideDrawable>() {
-                            @Override
-                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                android.util.Log.d("GLIDE",
-                                        String.format(Locale.ROOT, "onException(%s, %s, %s, %s)", e, model, target,
-                                                isFirstResource), e);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                android.util.Log.d("GLIDE",
-                                        String.format(Locale.ROOT, "onResourceReady(%s, %s, %s, %s, %s)", resource, model, target,
-                                                isFromMemoryCache, isFirstResource));
-                                return false;
-                            }
-                        })
+                        .load(spritesImage.getFrontShiny())
                         .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .dontTransform()
                         .into(pokemanImage);
             }
 
             @Override
-            public void onFailure(Call<Sprites> call, Throwable t) {
+            public void onFailure(Call<PokemanResponse> call, Throwable t) {
+                Log.d("Error",t.getMessage());
+            }
+        });
+
+        apiService.getPokemanResponse(pokeman).enqueue(new Callback<PokemanResponse>() {
+            @Override
+            public void onResponse(Call<PokemanResponse> call, Response<PokemanResponse> response) {
+                for (Stats stats : response.body().getStats()){
+                    Log.d("response" , stats.getStat().getName());
+                    adapter = new StatsAdapter(DetailActivity.this, response.body().getStats());
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PokemanResponse> call, Throwable t) {
                 Log.d("Error",t.getMessage());
             }
         });

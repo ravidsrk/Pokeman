@@ -14,125 +14,19 @@
     android:orientation="vertical"
     tools:showIn="@layout/activity_detail">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/pokemanImage"
         android:layout_gravity="center"
         android:src="@mipmap/ic_launcher"
+        android:layout_width="90dp"
+        android:layout_height="90dp" />
+
+    <android.support.v7.widget.RecyclerView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/rvStatList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="speed"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/speedProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
-
-    <TextView
-        android:text="special defense"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/specailDefenseProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
-
-    <TextView
-        android:text="special attack"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/specialAttackProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
-
-    <TextView
-        android:text="defense"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/defenseProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
-
-    <TextView
-        android:text="attack"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/attackProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
-
-    <TextView
-        android:text="hp"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/hpProgress"
-        android:progressTint="@color/colorPrimary"
-        android:background="@color/colorAccent"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:max="100"
-        android:progress="45"/>
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" />
 
 </LinearLayout>

@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         recyclerView = (RecyclerView)findViewById(R.id.rvList);
-//        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Retrofit retrofit = new Retrofit.Builder()

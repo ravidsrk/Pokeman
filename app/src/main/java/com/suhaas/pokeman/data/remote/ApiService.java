@@ -1,7 +1,9 @@
 package com.suhaas.pokeman.data.remote;
 
 
+import com.suhaas.pokeman.data.model.PokemanResponse;
 import com.suhaas.pokeman.data.model.Sprites;
+import com.suhaas.pokeman.data.model.Stats;
 import com.suhaas.pokeman.data.model.list.ListResponse;
 import com.suhaas.pokeman.data.model.list.Results;
 
@@ -16,5 +18,5 @@ public interface ApiService {
     Call<ListResponse> getListResponse();
 
     @GET("pokemon/{name}")
-    Call<Sprites> getUser(@Path("name") String name);
+    Call<PokemanResponse> getPokemanResponse(@Path("name") String name);
 }
