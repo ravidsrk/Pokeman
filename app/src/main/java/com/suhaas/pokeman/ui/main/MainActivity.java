@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.suhaas.pokeman.Constants;
 import com.suhaas.pokeman.R;
+import com.suhaas.pokeman.data.local.DatabaseWrapper;
 import com.suhaas.pokeman.data.model.list.ListResponse;
 import com.suhaas.pokeman.data.model.list.Results;
 import com.suhaas.pokeman.data.remote.ApiService;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rvList)
     RecyclerView recyclerView;
     private ListAdapter adapter;
+    DatabaseWrapper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
+        db = new DatabaseWrapper(this);
 
         recyclerView = (RecyclerView)findViewById(R.id.rvList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
