@@ -12,10 +12,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.suhaas.pokeman.Constants;
 import com.suhaas.pokeman.R;
+import com.suhaas.pokeman.data.local.PokemanDbHelper;
 import com.suhaas.pokeman.data.model.PokemanResponse;
 import com.suhaas.pokeman.data.model.Sprites;
+import com.suhaas.pokeman.data.model.Stat;
 import com.suhaas.pokeman.data.model.Stats;
 import com.suhaas.pokeman.data.remote.ApiService;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StatsAdapter adapter;
     String pokeman;
+    PokemanDbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,8 @@ public class DetailActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.rvStatList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        db = new PokemanDbHelper(this);
 
         pokemanImage = (android.support.v7.widget.AppCompatImageView) findViewById(R.id.pokemanImage);
 
@@ -60,12 +67,14 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<PokemanResponse> call, Response<PokemanResponse> response) {
                 Sprites spritesImage = response.body().getSprites();
+//                db.addSprites(spritesImage);
                 Glide.with(getApplicationContext())
                         .load(spritesImage.getFrontShiny())
                         .skipMemoryCache(true)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                         .dontTransform()
                         .into(pokemanImage);
+//                .load(spritesImage.getFrontShiny())
             }
 
             @Override
@@ -79,7 +88,10 @@ public class DetailActivity extends AppCompatActivity {
             public void onResponse(Call<PokemanResponse> call, Response<PokemanResponse> response) {
                 for (Stats stats : response.body().getStats()){
                     Log.d("response" , stats.getStat().getName());
-                    adapter = new StatsAdapter(DetailActivity.this, response.body().getStats());
+                    db.addStatNames(response.body().getStats());
+                    List<Stats> statsList = db.getAllStatNames();
+                    adapter = new StatsAdapter(DetailActivity.this, statsList);
+//                    adapter = new StatsAdapter(DetailActivity.this, response.body().getStats());
                     recyclerView.setAdapter(adapter);
                 }
             }
