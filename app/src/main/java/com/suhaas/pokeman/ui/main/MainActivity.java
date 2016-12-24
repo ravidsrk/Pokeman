@@ -11,10 +11,12 @@ import android.view.MenuItem;
 
 import com.suhaas.pokeman.Constants;
 import com.suhaas.pokeman.R;
-import com.suhaas.pokeman.data.local.DatabaseWrapper;
+import com.suhaas.pokeman.data.local.PokemanDbHelper;
 import com.suhaas.pokeman.data.model.list.ListResponse;
 import com.suhaas.pokeman.data.model.list.Results;
 import com.suhaas.pokeman.data.remote.ApiService;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rvList)
     RecyclerView recyclerView;
     private ListAdapter adapter;
-    DatabaseWrapper db;
+    PokemanDbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
-        db = new DatabaseWrapper(this);
+
+        db = new PokemanDbHelper(this);
 
         recyclerView = (RecyclerView)findViewById(R.id.rvList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -55,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<ListResponse> call, Response<ListResponse> response) {
                 for (Results results : response.body().getResults()){
                     Log.d("pokeman Name", results.getName());
-                    adapter = new ListAdapter(MainActivity.this, response.body().getResults());
+                    db.addList(response.body().getResults());
+                    List<Results> resultsList = db.getAllResults();
+                    adapter = new ListAdapter(MainActivity.this, resultsList);
+//                    adapter = new ListAdapter(MainActivity.this, response.body().getResults());
                     recyclerView.setAdapter(adapter);
                 }
             }
